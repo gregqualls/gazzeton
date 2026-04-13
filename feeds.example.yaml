@@ -1,0 +1,88 @@
+settings:
+  hours: 24
+  output_dir: ./output
+  max_articles_per_feed: 20
+  fetch_timeout: 10
+  # RSSHub instance for Twitter/X feeds (public instance, or self-host your own)
+  rsshub_url: https://rsshub.app
+
+categories:
+
+  - name: "Tech News"
+    feeds:
+      - name: TechCrunch
+        url: https://techcrunch.com/feed/
+      - name: The Verge
+        url: https://www.theverge.com/rss/index.xml
+      - name: Hacker News
+        url: https://news.ycombinator.com/rss
+      - name: Ars Technica
+        url: https://feeds.arstechnica.com/arstechnica/index
+      - name: Wired
+        url: https://www.wired.com/feed/rss
+      - name: Lobsters
+        url: https://lobste.rs/rss
+
+  - name: "AI / Machine Learning"
+    feeds:
+      - name: OpenAI News
+        url: https://openai.com/news/rss.xml
+      - name: Google AI Blog
+        url: https://blog.google/technology/ai/rss/
+      - name: HuggingFace Blog
+        url: https://huggingface.co/blog/feed.xml
+      - name: MIT Tech Review
+        url: https://www.technologyreview.com/feed/
+      - name: The Verge — AI
+        url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+      - name: Simon Willison
+        url: https://simonwillison.net/atom/everything/
+
+  - name: "Cloud & DevOps"
+    feeds:
+      - name: AWS News Blog
+        url: https://aws.amazon.com/blogs/aws/feed/
+      - name: Google Cloud Blog
+        url: https://cloudblog.withgoogle.com/rss
+      - name: CNCF Blog
+        url: https://www.cncf.io/blog/feed/
+      - name: Kubernetes Blog
+        url: https://kubernetes.io/feed.xml
+      - name: The New Stack
+        url: https://thenewstack.io/feed/
+
+  - name: "Gaming"
+    feeds:
+      # Infrequent blogs can use per-feed hours overrides
+      - name: Polygon
+        url: https://www.polygon.com/rss/index.xml
+      - name: Dicebreaker
+        url: https://www.dicebreaker.com/feed
+
+      # Reddit feeds work too
+      - name: Reddit r/gaming
+        url: https://www.reddit.com/r/gaming/.rss
+
+  - name: "Fun / General Interest"
+    feeds:
+      - name: xkcd
+        url: https://xkcd.com/rss.xml
+      - name: Reddit r/todayilearned
+        url: https://www.reddit.com/r/todayilearned/.rss
+
+  # ── Example: Twitter/X feeds via RSSHub ──
+  # Uncomment and add your own Twitter accounts:
+  #
+  # - name: "Twitter / X"
+  #   feeds:
+  #     - name: Some Account
+  #       url: https://x.com/username
+
+  # ── Example: Per-feed time window ──
+  # Use `hours` on feeds that post infrequently so you don't miss content:
+  #
+  # - name: "Niche Blogs"
+  #   feeds:
+  #     - name: Some Monthly Blog
+  #       url: https://example.com/blog
+  #       hours: 720  # 30 days

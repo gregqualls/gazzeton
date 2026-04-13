@@ -1,0 +1,14 @@
+/output/
+/logs/
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+.venv/
+
+# Personal config — use feeds.example.yaml as a template
+feeds.yaml
+run-daily.bat
+SETUP-GREG.md
+.claude/
