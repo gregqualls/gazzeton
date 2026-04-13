@@ -2,12 +2,14 @@
 
 Deterministic RSS feed aggregator that outputs Markdown. No AI, no generative content -- just fetches, filters, and formats RSS/Atom feeds from a curated list.
 
+> **Get started in 60 seconds:** [Copy this prompt into Claude Code](#quick-start-with-claude-code) and it'll set everything up for you -- finds your feeds, builds your config, schedules the daily task, done.
+
 ## Quick Start with Claude Code
 
 Copy and paste this prompt into Claude Code to have it walk you through the entire setup interactively:
 
 <details>
-<summary><strong>Click to expand the setup prompt</strong></summary>
+<summary><strong>Click to expand the setup prompt (copy button appears in top-right of code block)</strong></summary>
 
 ```
 I want you to help me set up Gazzeton (https://github.com/gregqualls/gazzeton) as a daily
