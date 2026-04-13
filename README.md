@@ -2,6 +2,84 @@
 
 Deterministic RSS feed aggregator that outputs Markdown. No AI, no generative content -- just fetches, filters, and formats RSS/Atom feeds from a curated list.
 
+## Quick Start with Claude Code
+
+Copy and paste this prompt into Claude Code to have it walk you through the entire setup interactively:
+
+<details>
+<summary><strong>Click to expand the setup prompt</strong></summary>
+
+```
+I want you to help me set up Gazzeton (https://github.com/gregqualls/gazzeton) as a daily
+news aggregator on my machine. Walk me through the entire process interactively.
+
+Here's what I need you to do, step by step:
+
+1. CLONE & INSTALL
+   - Clone the repo to a sensible location on my machine
+   - Detect whether I'm on macOS, Linux, or Windows
+   - Check that Python >= 3.10 is available
+   - Run `pip install -e .`
+   - Copy feeds.example.yaml to feeds.yaml
+
+2. DISCOVER MY INTERESTS
+   Ask me what topics and interests I want to follow. Be conversational — ask about:
+   - My profession/industry (for work-relevant feeds)
+   - Hobbies and personal interests
+   - Specific companies, products, or people I want to track
+   - Local area (city/region) for local news and events
+   - Whether I want any Twitter/X accounts included
+   - How much content I want (light briefing vs comprehensive)
+
+3. BUILD MY feeds.yaml
+   Based on my answers:
+   - Search the web for the best RSS feeds for each topic
+   - Verify each feed URL actually works by testing it with:
+     python -c "import feedparser; f = feedparser.parse('URL'); print(len(f.entries), 'entries')"
+   - Organise feeds into logical categories
+   - Set per-feed `hours` overrides for infrequent sources (blogs: 168h, local events: 72h)
+   - Write the final feeds.yaml
+
+4. TEST RUN
+   Run `python -m gazzeton --stdout --hours 48` and show me a sample of the output
+   to confirm everything is working. Fix any feeds that error.
+
+5. SCHEDULE IT
+   Based on my OS:
+
+   macOS:
+   - Create a launchd plist at ~/Library/LaunchAgents/com.gazzeton.daily.plist
+   - Set it to run daily at 3am (or ask me what time I prefer)
+   - Output to ~/Documents/gazzeton-latest.md
+   - Load it with: launchctl load ~/Library/LaunchAgents/com.gazzeton.daily.plist
+
+   Linux:
+   - Add a cron job: `0 3 * * * cd /path/to/gazzeton && python -m gazzeton -o ~/Documents/gazzeton-latest.md`
+
+   Windows:
+   - Create a run-daily.bat script
+   - Create a Windows Task Scheduler task using:
+     powershell.exe -Command "schtasks /create /tn 'Gazzeton Daily News' /tr 'C:\path\to\run-daily.bat' /sc daily /st 03:00 /rl limited /f"
+   - Include cleanup of dated files older than 30 days
+
+6. SET UP A COWORK SKILL (if I use Claude Cowork)
+   Ask if I use Claude Cowork. If yes:
+   - Create a news-briefing skill that reads ~/Documents/gazzeton-latest.md
+   - The skill should curate the top stories, group by category, skip noise,
+     and flag anything relevant to my work
+   - Save it as a Cowork skill in the appropriate location
+
+7. VERIFY EVERYTHING
+   - Run gazzeton once to confirm the output file is created
+   - Show me a summary of what was set up
+   - Tell me how to manually re-run it if needed
+   - Tell me how to add/remove feeds later
+
+Start by detecting my OS and asking about my interests.
+```
+
+</details>
+
 ## Why?
 
 AI assistants like Claude are great at summarising and curating news, but they struggle with web searches: results are inconsistent, stories repeat across runs, and sandboxed environments (like Claude Cowork) can't make outbound network requests at all.
