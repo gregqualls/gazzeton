@@ -15,11 +15,15 @@ Copy and paste this prompt into Claude Code to have it walk you through the enti
 I want you to help me set up Gazzeton (https://github.com/gregqualls/gazzeton) as a daily
 news aggregator on my machine. Walk me through the entire process interactively.
 
+IMPORTANT: Start by reading the README.md in the gazzeton repo after cloning — it has full
+documentation on how the tool works, the config format, CLI options, and examples.
+
 Here's what I need you to do, step by step:
 
 1. CLONE & INSTALL
    - Clone the repo to a sensible location on my machine
    - Detect whether I'm on macOS, Linux, or Windows
+   - Read the README.md to understand how gazzeton works
    - Check that Python >= 3.10 is available
    - Run `pip install -e .`
    - Copy feeds.example.yaml to feeds.yaml
@@ -38,6 +42,7 @@ Here's what I need you to do, step by step:
    - Search the web for the best RSS feeds for each topic
    - Verify each feed URL actually works by testing it with:
      python -c "import feedparser; f = feedparser.parse('URL'); print(len(f.entries), 'entries')"
+   - Remove any feeds that return 0 entries or parse errors
    - Organise feeds into logical categories
    - Set per-feed `hours` overrides for infrequent sources (blogs: 168h, local events: 72h)
    - Write the final feeds.yaml
@@ -47,37 +52,42 @@ Here's what I need you to do, step by step:
    to confirm everything is working. Fix any feeds that error.
 
 5. SCHEDULE IT
-   Based on my OS:
+   Ask me two things:
+   - What time should it run daily? (default: 3am)
+   - Where should the daily output file be saved? (default: ~/Documents/gazzeton-latest.md)
+
+   Then set it up based on my OS:
 
    macOS:
    - Create a launchd plist at ~/Library/LaunchAgents/com.gazzeton.daily.plist
-   - Set it to run daily at 3am (or ask me what time I prefer)
-   - Output to ~/Documents/gazzeton-latest.md
+   - Set it to run at my preferred time
+   - Output to my chosen path
    - Load it with: launchctl load ~/Library/LaunchAgents/com.gazzeton.daily.plist
 
    Linux:
-   - Add a cron job: `0 3 * * * cd /path/to/gazzeton && python -m gazzeton -o ~/Documents/gazzeton-latest.md`
+   - Add a cron job pointing to my chosen output path
 
    Windows:
-   - Create a run-daily.bat script
+   - Create a run-daily.bat script with my chosen output path
    - Create a Windows Task Scheduler task using:
      powershell.exe -Command "schtasks /create /tn 'Gazzeton Daily News' /tr 'C:\path\to\run-daily.bat' /sc daily /st 03:00 /rl limited /f"
    - Include cleanup of dated files older than 30 days
 
 6. SET UP A COWORK SKILL (if I use Claude Cowork)
-   Ask if I use Claude Cowork. If yes:
-   - Create a news-briefing skill that reads ~/Documents/gazzeton-latest.md
+   Ask if I use Claude Cowork or Claude Code with scheduled tasks. If yes:
+   - Create a news-briefing skill that reads from my chosen output path
    - The skill should curate the top stories, group by category, skip noise,
      and flag anything relevant to my work
    - Save it as a Cowork skill in the appropriate location
 
 7. VERIFY EVERYTHING
-   - Run gazzeton once to confirm the output file is created
+   - Run gazzeton once to confirm the output file is created at my chosen path
    - Show me a summary of what was set up
    - Tell me how to manually re-run it if needed
    - Tell me how to add/remove feeds later
 
-Start by detecting my OS and asking about my interests.
+Start by cloning the repo, reading the README, detecting my OS, and then asking about
+my interests and preferences.
 ```
 
 </details>
@@ -359,6 +369,19 @@ gazzeton/
 Twitter doesn't provide native RSS feeds. Gazzeton routes Twitter/X URLs through [RSSHub](https://docs.rsshub.app/), an open-source RSS bridge.
 
 The default public instance (`https://rsshub.app`) has rate limits. If you hit them, you can [self-host RSSHub](https://docs.rsshub.app/deploy/) and update the `rsshub_url` setting in `feeds.yaml`.
+
+## Security
+
+Gazzeton is a read-only tool with a small attack surface:
+
+- **No credentials or API keys** -- nothing to leak. No `.env` file, no auth tokens.
+- **No inbound network access** -- it only makes outbound HTTP requests to fetch RSS feeds.
+- **HTML sanitization** -- feedparser strips HTML content by default, preventing injection via malicious feed content.
+- **User-controlled config** -- gazzeton only fetches URLs you put in `feeds.yaml`. It never fetches arbitrary URLs from external input.
+- **Local output only** -- results are written to a local Markdown file. Nothing is sent to external services.
+- **No code execution** -- feed content is treated as data, never evaluated or executed.
+
+The only external network calls are HTTP GETs to the RSS feed URLs in your config and (if you use Twitter/X feeds) to your configured RSSHub instance.
 
 ## Dependencies
 
